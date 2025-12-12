@@ -1,3 +1,4 @@
+
 // models/Food.js
 import mongoose from "mongoose";
 
@@ -23,8 +24,13 @@ const FoodSchema = new mongoose.Schema({
     ingredients: String,
     nutrition: String
   },
+
+  // Canonical, normalized category used for UI filtering (e.g. "drinks", "biscuits")
+  // Stored lowercase for predictable filtering. Make sure your migration adds this field.
+  primary_category: { type: String, lowercase: true, index: true },
+
   last_updated: { type: Date, default: Date.now }
 }, { timestamps: true });
 
-// Explicit collection name if you want to be safe (optional if it already works)
+// Explicit collection name (matches your DB)
 export default mongoose.models.Food || mongoose.model("Food", FoodSchema, "food");
