@@ -1,5 +1,47 @@
+#name: main_project_files
+#description: "A new Flutter project."
+#publish_to: 'none'
+#version: 1.0.0+1
+#
+#environment:
+#  sdk: ^3.9.2
+#
+#dependencies:
+#  flutter:
+#    sdk: flutter
+#  tutorial_coach_mark: ^1.2.3
+#  shared_preferences: ^2.1.1
+#
+#  # ---- REQUIRED for FoodService (HTTP API calls) ----
+#  http: ^0.13.6
+#
+#  # ---- OPTIONAL but recommended (cached thumbnails, smoother UI) ----
+#  cached_network_image: ^3.2.3
+#
+#  # Your existing dependencies (DO NOT TOUCH)
+#  mobile_scanner: ^3.5.6
+#  curved_navigation_bar: ^1.0.6
+#  camera: ^0.11.0+2
+#  cupertino_icons: ^1.0.8
+#
+#dev_dependencies:
+#  flutter_test:
+#    sdk: flutter
+#  flutter_lints: ^5.0.0
+#
+#flutter:
+#  uses-material-design: true
+#
+#  assets:
+#    - images/packet_images/
+#    - images/intro_page_images/
+#    - images/home_page_images/
+
+
+
+
 name: main_project_files
-description: "A new Flutter project."
+description: "ScanToKnow – UI + OCR + Barcode integrated app"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,20 +51,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # ---------------- UI & UX ----------------
+  cupertino_icons: ^1.0.8
+  curved_navigation_bar: ^1.0.6
   tutorial_coach_mark: ^1.2.3
   shared_preferences: ^2.1.1
-
-  # ---- REQUIRED for FoodService (HTTP API calls) ----
-  http: ^0.13.6
-
-  # ---- OPTIONAL but recommended (cached thumbnails, smoother UI) ----
   cached_network_image: ^3.2.3
 
-  # Your existing dependencies (DO NOT TOUCH)
+  # ---------------- Scanning ----------------
   mobile_scanner: ^3.5.6
-  curved_navigation_bar: ^1.0.6
   camera: ^0.11.0+2
-  cupertino_icons: ^1.0.8
+
+  # ---------------- OCR & Image Processing ----------------
+  image: ^4.1.3
+
+  # ---------------- Networking ----------------
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:
