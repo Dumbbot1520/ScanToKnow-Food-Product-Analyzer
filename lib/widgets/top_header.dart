@@ -17,9 +17,9 @@ class TopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFFF3EAFE), // soft lavender
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: Colors.teal.shade200,
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(20),
           bottomRight: Radius.circular(20),
         ),
@@ -40,15 +40,16 @@ class TopHeader extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade700,
+                        fontSize: 16,
+                        color: Colors.black,
+
                       ),
                     ),
                   ],
@@ -120,7 +121,7 @@ class _SearchRow extends StatelessWidget {
               readOnly: true, // placeholder only
               decoration: InputDecoration.collapsed(
                 hintText: "Search for products, ingredients or brands",
-                hintStyle: TextStyle(color: Colors.grey.shade500),
+                hintStyle: TextStyle(color: Colors.black54),
               ),
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
