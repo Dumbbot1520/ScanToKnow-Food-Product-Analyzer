@@ -1,100 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'intro_page3.dart';
-//
-// class IntroPage2 extends StatelessWidget {
-//   const IntroPage2({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.orange[100],
-//       body: SafeArea(
-//         child: Padding(
-//           padding: const EdgeInsets.all(20.0),
-//           child: Column(
-//             children: [
-//               const Spacer(),
-//
-//               Image.asset(
-//                 'images/intro_page_images/intro_page2.png',
-//                 height: 250,
-//               ),
-//               const SizedBox(height: 40),
-//
-//               const Text(
-//                 "Know What You Eat",
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(
-//                   fontSize: 28,
-//                   fontWeight: FontWeight.bold,
-//                   color: Colors.deepOrange,
-//                 ),
-//               ),
-//               const SizedBox(height: 20),
-//
-//               const Text(
-//                 "Scan ingredients or barcodes to discover how healthy your food really is.",
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(fontSize: 18, color: Colors.black87),
-//               ),
-//
-//               const Spacer(),
-//
-//               ElevatedButton(
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: Colors.deepOrangeAccent,
-//                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(30),
-//                   ),
-//                 ),
-//                 onPressed: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(builder: (context) => const IntroPage3()),
-//                   );
-//                 },
-//                 child: const Text(
-//                   "Next",
-//                   style: TextStyle(fontSize: 20, color: Colors.white),
-//                 ),
-//               ),
-//
-//               const SizedBox(height: 30),
-//
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   _inactiveDot(),
-//                   const SizedBox(width: 8),
-//                   _activeDot(Colors.deepOrangeAccent),
-//                   const SizedBox(width: 8),
-//                   _inactiveDot(),
-//                 ],
-//               ),
-//
-//               const SizedBox(height: 40),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _activeDot(Color color) => Container(
-//     width: 12,
-//     height: 12,
-//     decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-//   );
-//
-//   Widget _inactiveDot() => Container(
-//     width: 12,
-//     height: 12,
-//     decoration: BoxDecoration(color: Colors.grey[400], shape: BoxShape.circle),
-//   );
-// }
-
-
 import 'package:flutter/material.dart';
 import 'intro_page3.dart';
 
@@ -104,9 +7,9 @@ class IntroPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[100],
+      backgroundColor: Colors.teal.shade50,
       body: SafeArea(
-        child: SingleChildScrollView(       // ✅ FIXED
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -114,20 +17,26 @@ class IntroPage2 extends StatelessWidget {
 
                 const SizedBox(height: 40),
 
-                Image.asset(
-                  'images/intro_page_images/intro_page2.png',
+                // 🔥 MATCH INTRO PAGE 1 VISUAL HEIGHT
+                SizedBox(
                   height: 250,
+                  child: Center(
+                    child: Image.asset(
+                      'images/intro_page_images/intro_page2.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
 
                 const SizedBox(height: 40),
 
-                const Text(
+                Text(
                   "Know What You Eat",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.deepOrange,
+                    color: Colors.teal.shade800,
                   ),
                 ),
 
@@ -136,14 +45,17 @@ class IntroPage2 extends StatelessWidget {
                 const Text(
                   "Scan ingredients or barcodes to discover how healthy your food really is.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, color: Colors.black87),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black87,
+                  ),
                 ),
 
                 const SizedBox(height: 50),
 
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrangeAccent,
+                    backgroundColor: Colors.teal.shade600,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 40,
                       vertical: 15,
@@ -155,7 +67,23 @@ class IntroPage2 extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const IntroPage3()),
+                      PageRouteBuilder(
+                        transitionDuration:
+                        const Duration(milliseconds: 400),
+                        pageBuilder:
+                            (_, animation, __) => const IntroPage3(),
+                        transitionsBuilder:
+                            (_, animation, __, child) {
+                          final curved = CurvedAnimation(
+                            parent: animation,
+                            curve: Curves.easeInOut,
+                          );
+                          return FadeTransition(
+                            opacity: curved,
+                            child: child,
+                          );
+                        },
+                      ),
                     );
                   },
                   child: const Text(
@@ -171,7 +99,7 @@ class IntroPage2 extends StatelessWidget {
                   children: [
                     _inactiveDot(),
                     const SizedBox(width: 8),
-                    _activeDot(Colors.deepOrangeAccent),
+                    _activeDot(Colors.teal.shade600),
                     const SizedBox(width: 8),
                     _inactiveDot(),
                   ],
@@ -189,12 +117,16 @@ class IntroPage2 extends StatelessWidget {
   Widget _activeDot(Color color) => Container(
     width: 12,
     height: 12,
-    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+    decoration:
+    BoxDecoration(color: color, shape: BoxShape.circle),
   );
 
   Widget _inactiveDot() => Container(
     width: 12,
     height: 12,
-    decoration: BoxDecoration(color: Colors.grey[400], shape: BoxShape.circle),
+    decoration: BoxDecoration(
+      color: Colors.grey[400],
+      shape: BoxShape.circle,
+    ),
   );
 }

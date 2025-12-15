@@ -97,6 +97,8 @@
 
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class IntroPage3 extends StatelessWidget {
   const IntroPage3({super.key});
@@ -104,7 +106,7 @@ class IntroPage3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[100],
+      backgroundColor: Colors.teal.shade50,
       body: SafeArea(
         child: SingleChildScrollView(      // ✅ FIXED
           child: Padding(
@@ -121,13 +123,13 @@ class IntroPage3 extends StatelessWidget {
 
                 const SizedBox(height: 40),
 
-                const Text(
+                Text(
                   "Start Your Healthy Journey!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.teal.shade800,
                   ),
                 ),
 
@@ -143,7 +145,7 @@ class IntroPage3 extends StatelessWidget {
 
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.teal.shade600,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 40,
                       vertical: 15,
@@ -152,12 +154,32 @@ class IntroPage3 extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool('intro_seen', true);
+
+                    Navigator.of(context).pushReplacement(
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 400),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                        const HomePage(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          final curvedAnimation = CurvedAnimation(
+                            parent: animation,
+                            curve: Curves.easeInOut,
+                          );
+
+                          return FadeTransition(
+                            opacity: curvedAnimation,
+                            child: child,
+                          );
+                        },
+                      ),
                     );
                   },
+
+
                   child: const Text(
                     "Start Scanning",
                     style: TextStyle(fontSize: 20, color: Colors.white),
@@ -173,7 +195,7 @@ class IntroPage3 extends StatelessWidget {
                     const SizedBox(width: 8),
                     _inactiveDot(),
                     const SizedBox(width: 8),
-                    _activeDot(Colors.green),
+                    _activeDot(Colors.teal.shade600),
                   ],
                 ),
 

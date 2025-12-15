@@ -69,9 +69,13 @@ class OCRProductDetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text("Ingredients & Additives"),
-        backgroundColor: Colors.orangeAccent,
+        title: const Text(
+          "Ingredients & Additives",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.teal.shade700,
       ),
+
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -145,13 +149,19 @@ class OCRProductDetailPage extends StatelessWidget {
             // --------------------------------------------------------------
             // INGREDIENTS SECTION
             // --------------------------------------------------------------
-            Text(
-              "Ingredients",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.orangeAccent,
-              ),
+            Row(
+              children: [
+                Icon(Icons.restaurant_menu, color: Colors.teal.shade700),
+                const SizedBox(width: 8),
+                Text(
+                  "Ingredients",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.teal.shade700,
+                  ),
+                ),
+              ],
             ),
 
             const SizedBox(height: 10),
@@ -161,51 +171,60 @@ class OCRProductDetailPage extends StatelessWidget {
 
             ...ingredients.map((i) {
               return Card(
-                elevation: 3,
+                elevation: 2,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: ListTile(
+                child: ExpansionTile(
                   leading: CircleAvatar(
                     backgroundColor: tagColor(i["tag"]),
-                    child: Text(i["tag"] ?? "", style: const TextStyle(fontSize: 22)),
+                    child: Text(
+                      i["tag"] ?? "",
+                      style: const TextStyle(fontSize: 20),
+                    ),
                   ),
                   title: Text(
                     i['name'] ?? '',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (i['description'] != null)
-                        Text(i['description']),
-                      if (i['health_note'] != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          "Health Note: ${i['health_note']}",
-                          style: const TextStyle(
-                              color: Colors.deepOrange,
-                              fontWeight: FontWeight.w600),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  children: [
+                    if (i['description'] != null)
+                      Text(i['description']),
+                    if (i['health_note'] != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        "Health Note: ${i['health_note']}",
+                        style: const TextStyle(
+                          color: Colors.deepOrange,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
+                      ),
                     ],
-                  ),
+                  ],
                 ),
               );
             }),
+
 
             const SizedBox(height: 25),
 
             // --------------------------------------------------------------
             // ADDITIVES SECTION
             // --------------------------------------------------------------
-            Text(
-              "Additives",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.redAccent,
-              ),
+            Row(
+              children: [
+                Icon(Icons.science_outlined, color: Colors.teal.shade700),
+                const SizedBox(width: 8),
+                Text(
+                  "Additives",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.teal.shade700,
+                  ),
+                ),
+              ],
             ),
 
             const SizedBox(height: 10),
@@ -215,38 +234,41 @@ class OCRProductDetailPage extends StatelessWidget {
 
             ...additives.map((a) {
               return Card(
-                elevation: 3,
+                elevation: 2,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: ListTile(
+                child: ExpansionTile(
                   leading: CircleAvatar(
                     backgroundColor: tagColor(a["tag"]),
-                    child: Text(a["tag"] ?? "", style: const TextStyle(fontSize: 22)),
+                    child: Text(
+                      a["tag"] ?? "",
+                      style: const TextStyle(fontSize: 20),
+                    ),
                   ),
                   title: Text(
                     a['name'] ?? a['code'] ?? "",
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(a['description'] ?? ''),
-                      if (a['health_note'] != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          "Health Note: ${a['health_note']}",
-                          style: const TextStyle(
-                            color: Colors.deepOrange,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  children: [
+                    if (a['description'] != null)
+                      Text(a['description']),
+                    if (a['health_note'] != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        "Health Note: ${a['health_note']}",
+                        style: const TextStyle(
+                          color: Colors.deepOrange,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
+                      ),
                     ],
-                  ),
+                  ],
                 ),
               );
             }),
+
 
             const SizedBox(height: 30),
           ],

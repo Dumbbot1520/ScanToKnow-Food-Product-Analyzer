@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   // 🔥 BASE URL must NOT include /analyze
-  static const String baseUrl = "http://10.221.10.227:4000/api/ingredients";
+  static const String baseUrl = "http://192.168.1.34/api/ingredients";
 
   /// Sends OCR extracted ingredients & additives to backend
   static Future<Map<String, dynamic>> analyzeIngredients({

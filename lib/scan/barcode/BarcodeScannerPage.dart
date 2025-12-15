@@ -210,7 +210,7 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.teal.shade600,
         title: const Text(
           'Barcode Scanner',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -242,19 +242,19 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
               width: 250,
               height: 150,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.redAccent, width: 3),
+                border: Border.all(color: Colors.tealAccent.shade400, width: 3),
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
           ),
           if (isLoading)
             Container(
-              color: Colors.black.withOpacity(0.7),
+              color: Colors.teal.shade900.withOpacity(0.85),
               child: const Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(color: Colors.orangeAccent),
+                    CircularProgressIndicator(color: Colors.white),
                     SizedBox(height: 12),
                     Text(
                       "Fetching product...",
@@ -272,7 +272,7 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
                   margin: const EdgeInsets.all(12),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.teal.shade900.withOpacity(0.85),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -296,7 +296,7 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
                           style: TextStyle(color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orangeAccent,
+                          backgroundColor: Colors.teal.shade700,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 8),
                           shape: RoundedRectangleBorder(
