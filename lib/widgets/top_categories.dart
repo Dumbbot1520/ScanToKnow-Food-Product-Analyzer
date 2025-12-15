@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 /// Simple immutable model for each category
@@ -75,12 +76,16 @@ class TopCategories extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("View All tapped (placeholder)")),
-                  );
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     const SnackBar(content: Text("View All tapped (placeholder)")),
+                //   );
                 },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                ),
                 child: const Text('View All'),
               ),
+
             ],
           ),
         ),

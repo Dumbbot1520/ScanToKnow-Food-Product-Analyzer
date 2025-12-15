@@ -238,8 +238,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
-    const selectedColor = Color(0xFF6B4EFF);
-    final inactiveColor = Colors.grey.shade600;
+    final selectedColor = Colors.teal.shade600;
+    final inactiveColor = Colors.teal.shade300;
+
 
     return Material(
       elevation: 10,
@@ -274,7 +275,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         height: 44,
                         decoration: selected
                             ? BoxDecoration(
-                          color: selectedColor.withOpacity(0.12),
+                          color: Colors.teal.shade100,
                           shape: BoxShape.circle,
                         )
                             : null,
