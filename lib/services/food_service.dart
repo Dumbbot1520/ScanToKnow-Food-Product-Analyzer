@@ -80,8 +80,8 @@ import 'package:main_project_files/models/food_item.dart';
 
 class FoodService {
   // IMPORTANT: Your laptop WiFi IPv4 from ipconfig
-  static const String baseUrl = "http://192.168.29.116:4000/api";
-
+  static const String baseUrl = "http://10.221.10.139:4000/api";
+  // 10.112.13.139
   /// Fetch drinks or any products by primary_category.
   static Future<FoodResponse> fetchFoods({
     String primaryCategory = "drinks",

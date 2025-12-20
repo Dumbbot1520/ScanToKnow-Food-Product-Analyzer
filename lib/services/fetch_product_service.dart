@@ -9,8 +9,8 @@ import 'package:main_project_files/services/api_service.dart';
 Future<Map<String, dynamic>?> fetchProduct(String barcode) async {
   try {
     // Replace with your actual backend URL
-    final url = Uri.parse('http://192.168.29.116:4000/api/barcode/product/$barcode');
-
+    final url = Uri.parse('http://10.221.10.139:4000/api/barcode/product/$barcode');
+    // 10.112.13.139
     final response = await http.get(
       url,
       headers: {

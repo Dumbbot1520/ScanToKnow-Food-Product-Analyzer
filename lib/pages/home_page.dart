@@ -1832,6 +1832,235 @@
 // }
 
 
+//
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+//
+// import 'package:main_project_files/scan/barcode/BarcodeScannerPage.dart';
+// import 'package:main_project_files/scan/ocr/OCRScanPage.dart';
+//
+// import 'package:main_project_files/widgets/top_header.dart';
+// import 'package:main_project_files/widgets/top_categories.dart';
+// import 'package:main_project_files/widgets/bottom_nav.dart';
+//
+// import 'package:main_project_files/pages/profile_page.dart';
+// import 'package:main_project_files/pages/drinks_page.dart';
+// import 'package:main_project_files/pages/tutorial_page.dart';
+//
+// // 👇 IMPORTANT: alias added here
+// import 'package:main_project_files/pages/product_detail_page.dart'
+// as details;
+//
+// import 'package:main_project_files/services/fetch_product_service.dart';
+//
+// class HomePage extends StatefulWidget {
+//   const HomePage({super.key});
+//
+//   @override
+//   State<HomePage> createState() => _HomePageState();
+// }
+//
+// class _HomePageState extends State<HomePage> {
+//   int _selectedTab = 0;
+//   DateTime? _lastPressed;
+//
+//   final GlobalKey _homeNavKey = GlobalKey();
+//   final GlobalKey _searchNavKey = GlobalKey();
+//   final GlobalKey _scanNavKey = GlobalKey();
+//   final GlobalKey _categoriesNavKey = GlobalKey();
+//   final GlobalKey _uploadNavKey = GlobalKey();
+//   final GlobalKey _smartReadNavKey = GlobalKey();
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       TutorialCoach.showBottomNavTutorial(
+//         context,
+//         homeKey: _homeNavKey,
+//         searchKey: _searchNavKey,
+//         scanKey: _scanNavKey,
+//         categoriesKey: _categoriesNavKey,
+//         uploadKey: _uploadNavKey,
+//         smartReadKey: _smartReadNavKey,
+//       );
+//     });
+//   }
+//
+//   Future<bool> _onBackPressed() async {
+//     final now = DateTime.now();
+//     if (_lastPressed == null ||
+//         now.difference(_lastPressed!) > const Duration(seconds: 2)) {
+//       _lastPressed = now;
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(content: Text("Press back again to exit")),
+//       );
+//       return false;
+//     }
+//     SystemNavigator.pop();
+//     return false;
+//   }
+//
+//   // ✅ BARCODE → FETCH → REAL PRODUCT DETAIL PAGE
+//   Future<void> _handleBarcode(String barcode) async {
+//     try {
+//       final product = await fetchProduct(barcode);
+//
+//       if (!mounted) return;
+//
+//       if (product == null) {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           const SnackBar(content: Text("Product not found")),
+//         );
+//         return;
+//       }
+//
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (_) =>
+//               details.ProductDetailPage(productData: product),
+//         ),
+//       );
+//     } catch (e) {
+//       if (!mounted) return;
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text("Error fetching product: $e")),
+//       );
+//     }
+//   }
+//
+//   void _onTabSelected(int index) {
+//     setState(() => _selectedTab = index);
+//
+//     switch (index) {
+//       case 1:
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (_) => const SearchPage()),
+//         );
+//         break;
+//
+//       case 2:
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(
+//             builder: (_) => BarcodeScannerPage(
+//               onDetect: _handleBarcode,
+//             ),
+//           ),
+//         );
+//         break;
+//
+//       case 3:
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (_) => const CategoriesPage()),
+//         );
+//         break;
+//
+//       case 4:
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (_) => const UploadPage()),
+//         );
+//         break;
+//
+//       case 5:
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(builder: (_) => const OCRScanPage()),
+//         );
+//         break;
+//     }
+//   }
+//
+//   void _openDrinks({String? initialCategory}) {
+//     Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (_) => DrinksPage(initialCategory: initialCategory),
+//       ),
+//     );
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return WillPopScope(
+//       onWillPop: _onBackPressed,
+//       child: Scaffold(
+//         backgroundColor: Colors.deepPurple.shade100,
+//         body: SafeArea(
+//           child: SingleChildScrollView(
+//             child: Column(
+//               children: [
+//                 TopHeader(
+//                   avatarAsset: 'images/home_page_images/user_logo.png',
+//                   onAvatarTap: () {
+//                     Navigator.push(
+//                       context,
+//                       MaterialPageRoute(builder: (_) => const ProfilePage()),
+//                     );
+//                   },
+//                 ),
+//                 const SizedBox(height: 18),
+//                 TopCategories(
+//                   onCategoryTap: (id, title) {
+//                     _openDrinks(initialCategory: title);
+//                   },
+//                 ),
+//                 const SizedBox(height: 80),
+//               ],
+//             ),
+//           ),
+//         ),
+//         bottomNavigationBar: BottomNavBar(
+//           initialIndex: _selectedTab,
+//           onTabSelected: _onTabSelected,
+//           homeKey: _homeNavKey,
+//           searchKey: _searchNavKey,
+//           scanKey: _scanNavKey,
+//           categoriesKey: _categoriesNavKey,
+//           uploadKey: _uploadNavKey,
+//           smartReadKey: _smartReadNavKey,
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// /* -------- PLACEHOLDERS -------- */
+//
+// class SearchPage extends StatelessWidget {
+//   const SearchPage({super.key});
+//   @override
+//   Widget build(BuildContext context) =>
+//       const Scaffold(body: Center(child: Text("Search placeholder")));
+// }
+//
+// class CategoriesPage extends StatelessWidget {
+//   const CategoriesPage({super.key});
+//   @override
+//   Widget build(BuildContext context) =>
+//       const Scaffold(body: Center(child: Text("Categories placeholder")));
+// }
+//
+// class UploadPage extends StatelessWidget {
+//   const UploadPage({super.key});
+//   @override
+//   Widget build(BuildContext context) =>
+//       const Scaffold(body: Center(child: Text("Upload placeholder")));
+// }
+
+
+
+
+
+
+
+
+
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1847,7 +2076,7 @@ import 'package:main_project_files/pages/profile_page.dart';
 import 'package:main_project_files/pages/drinks_page.dart';
 import 'package:main_project_files/pages/tutorial_page.dart';
 
-// 👇 IMPORTANT: alias added here
+// ✅ alias (DO NOT REMOVE)
 import 'package:main_project_files/pages/product_detail_page.dart'
 as details;
 
@@ -1887,21 +2116,41 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // ✅ STYLED BACK PRESS (FROM CODE 1)
   Future<bool> _onBackPressed() async {
     final now = DateTime.now();
+
     if (_lastPressed == null ||
         now.difference(_lastPressed!) > const Duration(seconds: 2)) {
       _lastPressed = now;
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Press back again to exit")),
+        SnackBar(
+          backgroundColor: Colors.deepPurple,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          content: const Text(
+            "Press back again to exit",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          duration: const Duration(seconds: 2),
+        ),
       );
       return false;
     }
+
     SystemNavigator.pop();
     return false;
   }
 
-  // ✅ BARCODE → FETCH → REAL PRODUCT DETAIL PAGE
+  // ✅ BARCODE → FETCH → PRODUCT DETAIL (UNCHANGED)
   Future<void> _handleBarcode(String barcode) async {
     try {
       final product = await fetchProduct(barcode);
@@ -1986,6 +2235,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ STATUS BAR STYLE (FROM CODE 1)
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.deepPurple,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
+
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -2003,17 +2260,126 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
+
                 const SizedBox(height: 18),
+
                 TopCategories(
                   onCategoryTap: (id, title) {
                     _openDrinks(initialCategory: title);
                   },
                 ),
+
+                const SizedBox(height: 18),
+
+                // ✅ ADVERTISEMENT CAROUSEL
+                SizedBox(
+                  height: 200,
+                  child: PageView.builder(
+                    controller: PageController(viewportFraction: 0.9),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      final headline = index == 0
+                          ? 'Say hello to Awareness'
+                          : (index == 1
+                          ? 'Using ScanToKnow — Rewards'
+                          : 'Eat Well. Live Well.');
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: GestureDetector(
+                          onTap: _openDrinks,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.deepPurple.shade50,
+                              borderRadius: BorderRadius.circular(18),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.04),
+                                  blurRadius: 8,
+                                )
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        headline,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      ElevatedButton(
+                                        onPressed: _openDrinks,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                          Colors.deepPurple,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(30),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Explore',
+                                          style:
+                                          TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // ✅ WEEKLY HEALTHY PICKS GRID
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 4,
+                    gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.6,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                    ),
+                    itemBuilder: (_, __) => Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            blurRadius: 6,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
                 const SizedBox(height: 80),
               ],
             ),
           ),
         ),
+
         bottomNavigationBar: BottomNavBar(
           initialIndex: _selectedTab,
           onTabSelected: _onTabSelected,
@@ -2029,7 +2395,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/* -------- PLACEHOLDERS -------- */
+/* -------- PLACEHOLDERS (UNCHANGED) -------- */
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -2051,3 +2417,4 @@ class UploadPage extends StatelessWidget {
   Widget build(BuildContext context) =>
       const Scaffold(body: Center(child: Text("Upload placeholder")));
 }
+
