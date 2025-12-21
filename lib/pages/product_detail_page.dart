@@ -444,7 +444,7 @@ class ProductDetailPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Divider(
         color: Colors.teal.shade200,
-        thickness: 1,
+        thickness: 3,
         height: 1,
       ),
     );
@@ -651,39 +651,45 @@ class ProductDetailPage extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
               ),
-              color: Colors.white,
+              color: Colors.black87,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                child: DefaultTextStyle(
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-                    InfoRow(label: "Brand", value: product['brands']),
-                    _infoDivider(),
-
-                    InfoRow(label: "Quantity", value: product['quantity']),
-                    _infoDivider(),
-
-                    InfoRow(label: "NutriScore", value: nutriScore),
-                    _infoDivider(),
-
-                    InfoRow(label: "Nova Group", value: nova?.toString()),
-
-                    if (product['labels'] != null &&
-                        (product['labels'] as List).isNotEmpty) ...[
+                      InfoRow(label: "Brand", value: product['brands']),
                       _infoDivider(),
-                      InfoRow(
-                        label: "Labels",
-                        value: (product['labels'] as List).join(', '),
-                      ),
+
+                      InfoRow(label: "Quantity", value: product['quantity']),
+                      _infoDivider(),
+
+                      InfoRow(label: "NutriScore", value: nutriScore),
+                      _infoDivider(),
+
+                      InfoRow(label: "Nova Group", value: nova?.toString()),
+
+                      if (product['labels'] != null &&
+                          (product['labels'] as List).isNotEmpty) ...[
+                        _infoDivider(),
+                        InfoRow(
+                          label: "Labels",
+                          value: (product['labels'] as List).join(', '),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),
 
 
-            const SizedBox(height: 22),
+
+            const SizedBox(height: 8),
 
 //---------------------------- CLEAN NOVA INFO DROPDOWN ----------------------------
             Card(
@@ -778,7 +784,7 @@ class ProductDetailPage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 3),
+            const SizedBox(height: 8),
 
             //---------------------------- INGREDIENTS SECTION ----------------------------
             Text(
@@ -796,42 +802,86 @@ class ProductDetailPage extends StatelessWidget {
             if (ingredients.isEmpty) const Text("No ingredients available."),
 
             ...ingredients.map(
-                  (i) => Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: ExpansionTile(
-                  leading: CircleAvatar(
-                    radius: 14,
-                    backgroundColor:
-                    i['tag'] == "🟢" ? Colors.green :
-                    i['tag'] == "🟠" ? Colors.orange :
-                    Colors.redAccent,
-                  ),
-                  title: Text(
-                    i['name'] ?? '',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                  children: [
-                    if (i['description'] != null)
-                      Text(
-                        i['description'],
-                        style: TextStyle(color: Colors.grey.shade800),
-                      ),
-                    if (i['health_note'] != null) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        "Health Note: ${i['health_note']}",
-                        style: const TextStyle(
-                          color: Colors.deepOrange,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                  (i) => Container(
+                margin: const EdgeInsets.symmetric(vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.teal.withOpacity(0.15),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
                   ],
+                ),
+                child: Theme(
+                  // 🔥 Removes ExpansionTile jitter + divider line
+                  data: Theme.of(context).copyWith(
+                    dividerColor: Colors.transparent,
+                  ),
+                  child: ExpansionTile(
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+
+                    leading: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: i['tag'] == "🟢"
+                            ? Colors.green
+                            : i['tag'] == "🟠"
+                            ? Colors.orange
+                            : Colors.redAccent,
+                      ),
+                    ),
+
+                    title: Text(
+                      i['name'] ?? '',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+
+                    iconColor: Colors.teal.shade700,
+                    collapsedIconColor: Colors.teal.shade700,
+
+                    children: [
+                      if (i['description'] != null)
+                        Text(
+                          i['description'],
+                          style: TextStyle(
+                            color: Colors.grey.shade800,
+                            height: 1.5,
+                          ),
+                        ),
+
+                      if (i['health_note'] != null) ...[
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.teal.shade50,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            "Health Note: ${i['health_note']}",
+                            style: TextStyle(
+                              color: Colors.teal.shade800,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
               ),
             ),
+
+
 
 
             const SizedBox(height: 22),
@@ -852,32 +902,69 @@ class ProductDetailPage extends StatelessWidget {
             if (additives.isEmpty) const Text("No additives available."),
 
             ...additives.map(
-                  (a) => Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: ExpansionTile(
-                  leading: CircleAvatar(
-                    radius: 14,
-                    backgroundColor:
-                    a['tag'] == "🟢" ? Colors.green :
-                    a['tag'] == "🟠" ? Colors.orange :
-                    Colors.redAccent,
-                  ),
-                  title: Text(
-                    a['name'] ?? a['code'] ?? '',
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                  children: [
-                    if (a['description'] != null)
-                      Text(
-                        a['description'],
-                        style: TextStyle(color: Colors.grey.shade800),
-                      ),
+                  (a) => Container(
+                margin: const EdgeInsets.symmetric(vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.teal.withOpacity(0.15),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
                   ],
+                ),
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    dividerColor: Colors.transparent, // removes ExpansionTile line + jitter
+                  ),
+                  child: ExpansionTile(
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+
+                    // 🔹 Additive risk indicator
+                    leading: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: a['tag'] == "🟢"
+                            ? Colors.green
+                            : a['tag'] == "🟠"
+                            ? Colors.orange
+                            : Colors.redAccent,
+                      ),
+                    ),
+
+                    // 🔹 Additive name / code
+                    title: Text(
+                      a['name'] ?? a['code'] ?? '',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+
+                    iconColor: Colors.teal.shade700,
+                    collapsedIconColor: Colors.teal.shade700,
+
+                    // 🔹 Expanded content
+                    children: [
+                      if (a['description'] != null)
+                        Text(
+                          a['description'],
+                          style: TextStyle(
+                            color: Colors.grey.shade800,
+                            height: 1.5,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
+
 
 
             const SizedBox(height: 30),
