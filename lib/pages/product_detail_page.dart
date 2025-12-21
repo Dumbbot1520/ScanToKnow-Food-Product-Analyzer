@@ -371,6 +371,87 @@ import 'package:main_project_files/models/product_model.dart';
 class ProductDetailPage extends StatelessWidget {
   final Map<String, dynamic> productData;
 
+  Widget _novaRow(String group, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.check_circle,
+            size: 18,
+            color: Colors.teal.shade600,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade800,
+                ),
+                children: [
+                  TextSpan(
+                    text: "$group — ",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: text),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _nutriRow(String grade, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.check_circle,
+            size: 18,
+            color: Colors.teal.shade600,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade800,
+                ),
+                children: [
+                  TextSpan(
+                    text: "$grade — ",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: text),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget _infoDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Divider(
+        color: Colors.teal.shade200,
+        thickness: 1,
+        height: 1,
+      ),
+    );
+  }
+
+
+
   const ProductDetailPage({Key? key, required this.productData})
       : super(key: key);
 
@@ -449,11 +530,12 @@ class ProductDetailPage extends StatelessWidget {
     final nova = product['nova_group'];
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.teal.shade50,
       appBar: AppBar(
         title: Text(product['name'] ?? 'Product Detail'),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.teal.shade700,
       ),
+
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -463,6 +545,7 @@ class ProductDetailPage extends StatelessWidget {
 
             //---------------------------- PRODUCT IMAGE CARD ----------------------------
             Card(
+              color: Colors.yellow.shade50,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               elevation: 4,
               child: Padding(
@@ -560,89 +643,153 @@ class ProductDetailPage extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 18),
-
-            //---------------------------- CLEAN NOVA INFO DROPDOWN ----------------------------
-            ExpansionTile(
-              title: const Text(
-                "What is NOVA?",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(
-                    "NOVA shows how processed a food is:\n\n"
-                        "• Group 1 → Natural or minimally processed (fruits, milk, eggs)\n"
-                        "• Group 2 → Cooking ingredients (sugar, oils)\n"
-                        "• Group 3 → Processed foods (bread, cheese, canned veggies)\n"
-                        "• Group 4 → Ultra-processed foods (chips, soft drinks, instant noodles)\n\n"
-                        "➡ Higher number = more processed and usually less healthy.",
-                    style: const TextStyle(fontSize: 15, height: 1.4),
-                  ),
-                )
-              ],
-            ),
-
             const SizedBox(height: 8),
-
-            //---------------------------- CLEAN NUTRISCORE INFO DROPDOWN ----------------------------
-            ExpansionTile(
-              title: const Text(
-                "What is Nutri-Score?",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(
-                    "Nutri-Score shows the overall healthiness of a food:\n\n"
-                        "A → Very healthy\n"
-                        "B → Healthy\n"
-                        "C → Moderate\n"
-                        "D → Less healthy\n"
-                        "E → Least healthy\n\n"
-                        "Based on sugar, salt, fats, calories, fibre, protein, and ingredients.",
-                    style: const TextStyle(fontSize: 15, height: 1.4),
-                  ),
-                )
-              ],
-            ),
-
-            const SizedBox(height: 22),
-
             //---------------------------- BASIC INFO CARD ----------------------------
             Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 4,
+              elevation: 8,
+              shadowColor: Colors.teal.withOpacity(0.25),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              color: Colors.white,
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     InfoRow(label: "Brand", value: product['brands']),
+                    _infoDivider(),
+
                     InfoRow(label: "Quantity", value: product['quantity']),
+                    _infoDivider(),
+
                     InfoRow(label: "NutriScore", value: nutriScore),
+                    _infoDivider(),
+
                     InfoRow(label: "Nova Group", value: nova?.toString()),
+
                     if (product['labels'] != null &&
-                        (product['labels'] as List).isNotEmpty)
+                        (product['labels'] as List).isNotEmpty) ...[
+                      _infoDivider(),
                       InfoRow(
                         label: "Labels",
                         value: (product['labels'] as List).join(', '),
                       ),
+                    ],
                   ],
                 ),
               ),
             ),
 
+
             const SizedBox(height: 22),
+
+//---------------------------- CLEAN NOVA INFO DROPDOWN ----------------------------
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              color: Colors.teal.shade50,
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  dividerColor: Colors.transparent,
+                ),
+                child: ExpansionTile(
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  title: Text(
+                    "What is NOVA?",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.teal.shade800,
+                    ),
+                  ),
+                  iconColor: Colors.teal.shade700,
+                  collapsedIconColor: Colors.teal.shade700,
+                  children: [
+                    _novaRow("Group 1", "Natural or minimally processed"),
+                    _novaRow("Group 2", "Cooking ingredients"),
+                    _novaRow("Group 3", "Processed foods"),
+                    _novaRow("Group 4", "Ultra-processed foods"),
+                    const SizedBox(height: 10),
+                    Text(
+                      "Higher number = more processed and less healthy.",
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.4,
+                        color: Colors.grey.shade800,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+
+
+            const SizedBox(height: 3),
+
+            //---------------------------- CLEAN NUTRISCORE INFO DROPDOWN ----------------------------
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              color: Colors.teal.shade50,
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  dividerColor: Colors.transparent,
+                ),
+                child: ExpansionTile(
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  title: Text(
+                    "What is Nutri-Score?",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.teal.shade800,
+                    ),
+                  ),
+                  iconColor: Colors.teal.shade700,
+                  collapsedIconColor: Colors.teal.shade700,
+                  children: [
+                    _nutriRow("A", "Very healthy"),
+                    _nutriRow("B", "Healthy"),
+                    _nutriRow("C", "Moderate"),
+                    _nutriRow("D", "Poor"),
+                    _nutriRow("E", "Very poor"),
+                    const SizedBox(height: 10),
+                    Text(
+                      "Based on sugar, salt, fats, calories, fibre and protein.",
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.4,
+                        color: Colors.grey.shade800,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 3),
 
             //---------------------------- INGREDIENTS SECTION ----------------------------
             Text(
               "Ingredients",
               style: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.orangeAccent),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.teal.shade700,
+              ),
             ),
+
 
             const SizedBox(height: 10),
 
@@ -650,31 +797,42 @@ class ProductDetailPage extends StatelessWidget {
 
             ...ingredients.map(
                   (i) => Card(
-                elevation: 3,
+                elevation: 2,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: ListTile(
+                child: ExpansionTile(
+                  leading: CircleAvatar(
+                    radius: 14,
+                    backgroundColor:
+                    i['tag'] == "🟢" ? Colors.green :
+                    i['tag'] == "🟠" ? Colors.orange :
+                    Colors.redAccent,
+                  ),
                   title: Text(
                     i['name'] ?? '',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (i['description'] != null) Text(i['description'] ?? ''),
-                      if (i['health_note'] != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          "Health Note: ${i['health_note']}",
-                          style: const TextStyle(
-                              color: Colors.deepOrange, fontWeight: FontWeight.w600),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  children: [
+                    if (i['description'] != null)
+                      Text(
+                        i['description'],
+                        style: TextStyle(color: Colors.grey.shade800),
+                      ),
+                    if (i['health_note'] != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        "Health Note: ${i['health_note']}",
+                        style: const TextStyle(
+                          color: Colors.deepOrange,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
+                      ),
                     ],
-                  ),
-                  trailing: Text(i['tag'] ?? ''),
+                  ],
                 ),
               ),
             ),
+
 
             const SizedBox(height: 22),
 
@@ -682,8 +840,12 @@ class ProductDetailPage extends StatelessWidget {
             Text(
               "Additives",
               style: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.redAccent),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.teal.shade700,
+              ),
             ),
+
 
             const SizedBox(height: 10),
 
@@ -691,18 +853,32 @@ class ProductDetailPage extends StatelessWidget {
 
             ...additives.map(
                   (a) => Card(
-                elevation: 3,
+                elevation: 2,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: ListTile(
+                child: ExpansionTile(
+                  leading: CircleAvatar(
+                    radius: 14,
+                    backgroundColor:
+                    a['tag'] == "🟢" ? Colors.green :
+                    a['tag'] == "🟠" ? Colors.orange :
+                    Colors.redAccent,
+                  ),
                   title: Text(
                     a['name'] ?? a['code'] ?? '',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  subtitle: Text(a['description'] ?? ''),
-                  trailing: Text(a['tag'] ?? ''),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  children: [
+                    if (a['description'] != null)
+                      Text(
+                        a['description'],
+                        style: TextStyle(color: Colors.grey.shade800),
+                      ),
+                  ],
                 ),
               ),
             ),
+
 
             const SizedBox(height: 30),
           ],
