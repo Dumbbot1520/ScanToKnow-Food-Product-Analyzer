@@ -1,43 +1,26 @@
-import { findProductByBarcode } from "../services/product.service.js";
+// src/controllers/product.controller.js
+import * as ProductService from "../services/product.service.js";
+import { parseListQuery, toObjectId } from "../utils/queryParser.js";
 
-export async function scanByBarcode(req, res) {
+export const listProducts = async (req, res, next) => {
   try {
-    const { barcode } = req.query;
+    const { page, limit, skip, filters, sort, categoryId } = parseListQuery(req.query);
+    // convert categoryId to ObjectId if needed
+    const catId = toObjectId(categoryId) || categoryId;
+    const withFacets = (req.query.withFacets === "true" || req.query.withFacets === "1");
 
-    if (!barcode) {
-      return res.status(400).json({
-        error: {
-          code: "BARCODE_REQUIRED",
-          message: "Barcode query parameter is required"
-        }
-      });
-    }
-
-    const product = await findProductByBarcode(barcode);
-
-    if (!product) {
-      return res.status(404).json({
-        error: {
-          code: "PRODUCT_NOT_FOUND",
-          message: "No product found for this barcode"
-        }
-      });
-    }
-
-    return res.json({
-      data: product,
-      meta: {
-        source: "barcode"
-      }
+    const result = await ProductService.getProductsByCategory({
+      categoryId: catId,
+      filters,
+      page,
+      limit,
+      skip,
+      sort,
+      withFacets
     });
 
+    res.json({ status: "ok", data: result.items, facets: result.facets, meta: result.meta });
   } catch (err) {
-    console.error("Barcode scan error:", err);
-    return res.status(500).json({
-      error: {
-        code: "SERVER_ERROR",
-        message: "Internal server error"
-      }
-    });
+    next(err);
   }
-}
+};
