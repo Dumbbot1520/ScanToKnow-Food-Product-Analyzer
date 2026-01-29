@@ -1,3 +1,5 @@
+// src/models/productVariant.model.js
+
 import mongoose from "mongoose";
 
 /**

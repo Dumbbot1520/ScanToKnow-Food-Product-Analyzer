@@ -1,19 +1,96 @@
+// src/controllers/category.controller.js
 import * as CategoryService from "../services/category.service.js";
 
-export const listTopCategories = async (req, res, next) => {
+/**
+ * Utility: normalize any incoming category identifier
+ */
+function normalizeParam(raw) {
+  let val = String(raw || "");
+  if (val.normalize) {
+    val = val.normalize("NFKC");
+  }
+  return val.replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
+}
+
+/**
+ * GET /v1/categories
+ * Optional: ?level=1
+ */
+export const listCategories = async (req, res, next) => {
   try {
-    const categories = await CategoryService.getTopLevelCategories();
-    res.json(categories);
+    const level = req.query.level ? Number(req.query.level) : undefined;
+    const data = await CategoryService.listCategories({ level });
+    return res.json({ status: "ok", data });
   } catch (err) {
     next(err);
   }
 };
 
-export const getCategoryById = async (req, res, next) => {
+/**
+ * GET /v1/categories/:id
+ */
+export const getCategory = async (req, res, next) => {
   try {
-    const result = await CategoryService.getCategoryWithChildren(req.params.id);
-    res.json(result);
+    const id = normalizeParam(req.params.id);
+    if (!id) {
+      return res.status(400).json({ error: "Category id required" });
+    }
+
+    const data = await CategoryService.getCategoryByIdOrSlug(id);
+    if (!data) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    return res.json({ status: "ok", data });
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    next(err);
+  }
+};
+
+/**
+ * GET /v1/categories/:id/children
+ */
+export const getChildren = async (req, res, next) => {
+  try {
+    const id = normalizeParam(req.params.id);
+    if (!id) {
+      return res.status(400).json({ error: "Category id required" });
+    }
+
+    const data = await CategoryService.getImmediateChildren(id);
+    return res.json({ status: "ok", data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * GET /v1/categories/:id/products
+ * Query params: page, limit, sort
+ */
+export const getProductsForCategory = async (req, res, next) => {
+  try {
+    const id = normalizeParam(req.params.id);
+    if (!id) {
+      return res.status(400).json({ error: "Category id required" });
+    }
+
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.min(100, Number(req.query.limit) || 24);
+    const sort = req.query.sort || "popular";
+
+    const result = await CategoryService.getProductsForCategory({
+      id,
+      page,
+      limit,
+      sort
+    });
+
+    return res.json({
+      status: "ok",
+      ...result
+    });
+  } catch (err) {
+    next(err);
   }
 };
