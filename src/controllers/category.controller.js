@@ -2,7 +2,9 @@
 import * as CategoryService from "../services/category.service.js";
 
 /**
- * Utility: normalize any incoming category identifier
+ * Utility: normalize incoming params
+ * - removes BOM / zero-width chars
+ * - trims whitespace
  */
 function normalizeParam(raw) {
   let val = String(raw || "");
@@ -14,12 +16,23 @@ function normalizeParam(raw) {
 
 /**
  * GET /v1/categories
- * Optional: ?level=1
+ * Optional query:
+ *   ?level=1
+ *   ?limit=6
  */
 export const listCategories = async (req, res, next) => {
   try {
-    const level = req.query.level ? Number(req.query.level) : undefined;
-    const data = await CategoryService.listCategories({ level });
+    const level =
+      req.query.level !== undefined ? Number(req.query.level) : undefined;
+
+    const limit =
+      req.query.limit !== undefined ? Number(req.query.limit) : undefined;
+
+    const data = await CategoryService.listCategories({
+      level,
+      limit
+    });
+
     return res.json({ status: "ok", data });
   } catch (err) {
     next(err);
@@ -28,6 +41,7 @@ export const listCategories = async (req, res, next) => {
 
 /**
  * GET /v1/categories/:id
+ * id = slug OR ObjectId
  */
 export const getCategory = async (req, res, next) => {
   try {
@@ -49,6 +63,7 @@ export const getCategory = async (req, res, next) => {
 
 /**
  * GET /v1/categories/:id/children
+ * Returns immediate subcategories (level+1)
  */
 export const getChildren = async (req, res, next) => {
   try {
@@ -66,7 +81,10 @@ export const getChildren = async (req, res, next) => {
 
 /**
  * GET /v1/categories/:id/products
- * Query params: page, limit, sort
+ * Query params:
+ *   ?page=1
+ *   ?limit=24
+ *   ?sort=popular|new|alpha
  */
 export const getProductsForCategory = async (req, res, next) => {
   try {

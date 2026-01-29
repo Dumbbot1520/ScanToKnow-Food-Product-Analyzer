@@ -4,16 +4,16 @@ import * as CategoryController from "../controllers/category.controller.js";
 
 const router = express.Router();
 
-// list top-level
+// List categories (used for top categories & View All)
 router.get("/", CategoryController.listCategories);
 
-// get single
+// Get single category by slug or id
 router.get("/:id", CategoryController.getCategory);
 
-// get children
+// Get immediate children (subcategories)
 router.get("/:id/children", CategoryController.getChildren);
 
-// products for category (descendants included)
+// Get products under category (descendants included)
 router.get("/:id/products", CategoryController.getProductsForCategory);
 
 export default router;
