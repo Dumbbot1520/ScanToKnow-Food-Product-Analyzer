@@ -27,9 +27,14 @@ dependencies:
   cached_network_image: ^3.2.3
   image: ^4.1.3
 
-  # ---------------- Scanning ----------------
-  mobile_scanner: ^3.5.6
+  # ---------------- Camera & Scanning ----------------
   camera: ^0.11.0+2
+
+  # Google ML Kit (Barcode Scanning)
+  google_mlkit_barcode_scanning: ^0.10.0
+
+  # (Optional but safe – used internally by ML Kit)
+  google_mlkit_commons: ^0.6.0
 
 dev_dependencies:
   flutter_test:
