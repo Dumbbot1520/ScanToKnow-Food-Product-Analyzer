@@ -58,6 +58,8 @@ dependencies:
   tutorial_coach_mark: ^1.2.3
   shared_preferences: ^2.1.1
   cached_network_image: ^3.2.3
+  showcaseview: ^2.0.3
+
 
   # ---------------- Scanning ----------------
   mobile_scanner: ^3.5.6
