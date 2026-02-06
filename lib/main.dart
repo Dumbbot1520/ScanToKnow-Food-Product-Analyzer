@@ -1,67 +1,59 @@
+// lib/main.dart
+
 import 'package:flutter/material.dart';
-import 'pages/intro_page1.dart';   // <-- You DO use this
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Onboarding
+import 'features/onboarding/presentation/intro_page1.dart';
+
+// Home
+import 'features/home/presentation/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const Scan2KnowApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Scan2KnowApp extends StatelessWidget {
+  const Scan2KnowApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Scan2Know',
       debugShowCheckedModeBanner: false,
-      title: 'Scan to Know',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: Colors.teal,
+        useMaterial3: true,
       ),
-      home: const IntroPage1(), // First page of the app
+      home: const _AppEntry(),
     );
   }
 }
 
-// Below is the default Flutter counter screen template.
-// You do not route to this page currently, but it’s okay if you want to keep it.
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+class _AppEntry extends StatelessWidget {
+  const _AppEntry();
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() => _counter++);
+  Future<bool> _hasSeenIntro() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('intro_seen') ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+    return FutureBuilder<bool>(
+      future: _hasSeenIntro(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final seenIntro = snapshot.data!;
+
+        return seenIntro ? const HomePage() : const IntroPage1();
+      },
     );
   }
 }
