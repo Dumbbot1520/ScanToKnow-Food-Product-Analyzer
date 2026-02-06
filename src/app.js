@@ -11,6 +11,7 @@ import categoryRoutes from "./routes/category.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import variantRoutes from "./routes/variant.routes.js";
 import scanRoutes from "./routes/scan.routes.js";
+import searchRoutes from "./routes/search.routes.js"; // ✅ ADDED
 
 const app = express();
 
@@ -80,13 +81,14 @@ app.get("/ready", (req, res) => {
 });
 
 /* =======================
-   ROUTES (UNCHANGED)
+   ROUTES (UNCHANGED + SEARCH ADDED)
    ======================= */
 
 app.use("/v1/categories", categoryRoutes);
 app.use("/v1/products", productRoutes);
 app.use("/v1/variants", variantRoutes);
 app.use("/v1/scan", scanRoutes);
+app.use("/v1/search", searchRoutes); // ✅ ADDED
 
 /* =======================
    404 FALLBACK
