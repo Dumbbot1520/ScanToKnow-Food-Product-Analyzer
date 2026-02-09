@@ -1,11 +1,41 @@
 // lib/core/ui/category_image_resolver.dart
 // central place to map category slug -> local asset path
 // update this map whenever you add new assets to images/home_page_images/
+// NOTE: This file preserves the original top-category logic and only adds
+//       a drinks subcategory resolution before falling back to the original code.
 
 String? assetForCategorySlug(String slug) {
   if (slug == null) return null;
   final s = slug.toLowerCase();
 
+  // -------------------------
+  // NEW: drinks subcategory support
+  // -------------------------
+  // If this slug matches a known drinks subcategory slug, return the subcategory asset.
+  // We only add support for the drinks subfolder here (images/categories/drinks/<slug>.png).
+  // This is deterministic (no runtime asset checks). Make sure these files exist.
+  const drinksSubcategorySlugs = <String>{
+    '100-percent-fruit-juices',
+    'fruit-drinks-nectars',
+    'carbonated-soft-drinks',
+    'masala-sparkling-sodas',
+    'ethnic-still-beverages',
+    'energy-sports-drinks',
+    'non-alcoholic-malts-beers',
+    'mixers-tonics',
+    'concentrates-instant-mixes',
+    'wellness-juices',
+    'dairy-based-beverages',
+    'packaged-waters',
+  };
+
+  if (drinksSubcategorySlugs.contains(s)) {
+    return 'images/categories/drinks/$s.png';
+  }
+
+  // -------------------------
+  // ORIGINAL resolver code (unchanged)
+  // -------------------------
   const mapping = <String, String>{
     // exact matches (use the filenames you already have)
     'drinks': 'images/home_page_images/drinks.png',
