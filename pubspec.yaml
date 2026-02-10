@@ -1,6 +1,7 @@
 name: main_project_files
 description: "ScanToKnow – UI + OCR + Barcode integrated app"
 publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:
@@ -30,21 +31,28 @@ dependencies:
   # ---------------- Camera & Scanning ----------------
   camera: ^0.11.0+2
 
-  # Google ML Kit (Barcode Scanning)
+  # Google ML Kit – Barcode Scanning
   google_mlkit_barcode_scanning: ^0.10.0
-
-  # (Optional but safe – used internally by ML Kit)
   google_mlkit_commons: ^0.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
   flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
 
   assets:
-    - images/packet_images/
-    - images/intro_page_images/
+    # ───────── Home / Top Categories ─────────
     - images/home_page_images/
+
+    # ───────── Subcategories (Drinks) ─────────
+    - images/categories/drinks/
+
+    # ───────── Intro / Onboarding ─────────
+    - images/intro_page_images/
+
+    # ───────── Product Packet Images ─────────
+    - images/packet_images/
