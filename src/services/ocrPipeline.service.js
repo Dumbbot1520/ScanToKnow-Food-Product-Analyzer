@@ -3,37 +3,59 @@
 // import { extractIngredientsAndAdditives } from "./ingredientExtractor.service.js";
 // import { computeNOVA } from "./nova.service.js";
 
+// /* ✅ REQUIRED: regex safety */
+// function escapeRegex(text) {
+//   return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+// }
+
 // export async function runOCRPipeline(rawText) {
-//   // 1️⃣ Extract
+//   // 1️⃣ Extract text → tokens
 //   const { ingredients, additives } =
 //     extractIngredientsAndAdditives(rawText);
 
-//   // 2️⃣ Resolve ingredients from DB
+//   // 2️⃣ Resolve INGREDIENTS (SAFE)
 //   const ingredientDocs = await Promise.all(
-//     ingredients.map(name =>
-//       Ingredient.findOne({
+//     ingredients.map(name => {
+//       const safe = escapeRegex(name);
+//       return Ingredient.findOne({
 //         $or: [
-//           { canonical_name: new RegExp(`^${name}$`, "i") },
-//           { aliases: new RegExp(`^${name}$`, "i") }
+//           { canonical_name: new RegExp(`^${safe}$`, "i") },
+//           { aliases: new RegExp(`^${safe}$`, "i") }
 //         ]
-//       }).lean()
-//     )
+//       }).lean();
+//     })
 //   );
 
-//   // 3️⃣ Resolve additives from DB
+//   const resolvedIngredients = ingredientDocs.map((doc, idx) => {
+//   if (doc) {
+//     return {
+//       name: doc.canonical_name,
+//       description: doc.description || null,
+//       source_tag: doc.source_tag || null
+//     };
+//   }
+
+//   // 🔥 FALLBACK: preserve raw ingredient text
+//   return {
+//     name: ingredients[idx],
+//     description: null,
+//     source_tag: "⚪"
+//   };
+// });
+
+
+//   // 3️⃣ Resolve ADDITIVES (SAFE)
 //   const additiveDocs = await Promise.all(
-//     additives.map(code =>
-//       Additive.findOne({ code: code.toLowerCase() }).lean()
-//     )
+//     additives.map(code => {
+//       const safe = escapeRegex(code);
+//       return Additive.findOne({
+//         $or: [
+//           { code: new RegExp(`^${safe}$`, "i") },
+//           { synonyms: new RegExp(`^${safe}$`, "i") }
+//         ]
+//       }).lean();
+//     })
 //   );
-
-//   const resolvedIngredients = ingredientDocs
-//     .filter(Boolean)
-//     .map(i => ({
-//       name: i.canonical_name,
-//       description: i.description || null,
-//       health_rating: i.health_rating || null
-//     }));
 
 //   const resolvedAdditives = additiveDocs
 //     .filter(Boolean)
@@ -41,10 +63,10 @@
 //       code: a.code.toUpperCase(),
 //       name: a.name,
 //       description: a.description || null,
-//       health_rating: a.health_rating || null
+//       source_tag: a.source_tag || null
 //     }));
 
-//   // 4️⃣ NOVA
+//   // 4️⃣ NOVA (unchanged)
 //   const nova = computeNOVA({
 //     ingredients,
 //     additives
@@ -56,50 +78,60 @@
 //     nova
 //   };
 // }
+
+
 import Ingredient from "../models/ingredient.model.js";
 import Additive from "../models/additive.model.js";
 import { extractIngredientsAndAdditives } from "./ingredientExtractor.service.js";
 import { computeNOVA } from "./nova.service.js";
+
+/* ✅ REQUIRED: regex safety */
+function escapeRegex(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 export async function runOCRPipeline(rawText) {
   // 1️⃣ Extract text → tokens
   const { ingredients, additives } =
     extractIngredientsAndAdditives(rawText);
 
-  // 2️⃣ Resolve INGREDIENTS
+  // 2️⃣ Resolve INGREDIENTS (SAFE)
   const ingredientDocs = await Promise.all(
-    ingredients.map(name =>
-      Ingredient.findOne({
+    ingredients.map(name => {
+      const safe = escapeRegex(name);
+      return Ingredient.findOne({
         $or: [
-          { canonical_name: new RegExp(`^${name}$`, "i") },
-          { aliases: new RegExp(`^${name}$`, "i") }
+          { canonical_name: new RegExp(`^${safe}$`, "i") },
+          { aliases: new RegExp(`^${safe}$`, "i") }
         ]
-      }).lean()
-    )
+      }).lean();
+    })
   );
 
+  // ✅ ONLY RETURN DB-MATCHED INGREDIENTS
   const resolvedIngredients = ingredientDocs
-    .filter(Boolean)
-    .map(i => ({
-      name: i.canonical_name,
-      description: i.description || null,
-      source_tag: i.source_tag || null
+    .filter(doc => doc && doc.canonical_name)
+    .map(doc => ({
+      name: doc.canonical_name,
+      description: doc.description || null,
+      source_tag: doc.source_tag || null
     }));
 
-  // 3️⃣ Resolve ADDITIVES (case-safe + synonym-safe)
+  // 3️⃣ Resolve ADDITIVES (SAFE)
   const additiveDocs = await Promise.all(
-    additives.map(code =>
-      Additive.findOne({
+    additives.map(code => {
+      const safe = escapeRegex(code);
+      return Additive.findOne({
         $or: [
-          { code: new RegExp(`^${code}$`, "i") },
-          { synonyms: new RegExp(`^${code}$`, "i") }
+          { code: new RegExp(`^${safe}$`, "i") },
+          { synonyms: new RegExp(`^${safe}$`, "i") }
         ]
-      }).lean()
-    )
+      }).lean();
+    })
   );
 
   const resolvedAdditives = additiveDocs
-    .filter(Boolean)
+    .filter(a => a && a.code)
     .map(a => ({
       code: a.code.toUpperCase(),
       name: a.name,
@@ -107,7 +139,7 @@ export async function runOCRPipeline(rawText) {
       source_tag: a.source_tag || null
     }));
 
-  // 4️⃣ NOVA (still based on raw strings)
+  // 4️⃣ NOVA (unchanged)
   const nova = computeNOVA({
     ingredients,
     additives

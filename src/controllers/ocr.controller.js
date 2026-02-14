@@ -75,3 +75,4 @@ export const scanOCR = async (req, res, next) => {
     next(err);
   }
 };
+
