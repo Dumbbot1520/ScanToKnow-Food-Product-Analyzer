@@ -119,27 +119,27 @@ export function computeNOVA({ ingredients = [], additives = [] }) {
   for (const i of combined) {
     if (nova4.some(n => i.includes(n))) {
       reasons.push(`Contains ultra-processed component (${i})`);
-      return { group: 4, label: "Ultra-Processed", reasons };
+      return { group: 4, label: "NOVA 4:Ultra-Processed", reasons };
     }
   }
 
   for (const i of combined) {
     if (nova3.some(n => i.includes(n))) {
       reasons.push(`Processed ingredient (${i})`);
-      return { group: 3, label: "Processed", reasons };
+      return { group: 3, label: "NOVA 3:Processed", reasons };
     }
   }
 
   for (const i of combined) {
     if (nova2.some(n => i.includes(n))) {
       reasons.push(`Culinary ingredient (${i})`);
-      return { group: 2, label: "Culinary Ingredients", reasons };
+      return { group: 2, label: "NOVA 2:Culinary Ingredients", reasons };
     }
   }
 
   return {
     group: 1,
-    label: "Unprocessed / Minimally Processed",
+    label: "NOVA 1:Unprocessed / Minimally Processed",
     reasons: ["Only whole or minimally processed ingredients detected"]
   };
 }
