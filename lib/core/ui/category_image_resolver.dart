@@ -18,7 +18,7 @@ String? assetForCategorySlug(String slug) {
     '100-percent-fruit-juices',
     'fruit-drinks-nectars',
     'carbonated-soft-drinks',
-    'indian-masala-sparkling-sodas',
+    'masala-sparkling-sodas',
     'ethnic-still-beverages',
     'energy-sports-drinks',
     'non-alcoholic-malts-beers',
