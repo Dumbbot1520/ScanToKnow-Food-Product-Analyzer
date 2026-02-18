@@ -33,7 +33,7 @@ import 'package:http/http.dart' as http;
 
 class OCRApiService {
   static const String _baseUrl =
-      "http://10.180.162.139:4000/v1/ocr/scan";
+      "http://172.18.128.75:4000/v1/ocr/scan";
 
   static Future<Map<String, dynamic>> scanImage(File image) async {
     final request = http.MultipartRequest(
