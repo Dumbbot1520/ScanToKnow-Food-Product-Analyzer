@@ -50,6 +50,18 @@ The main goal of Scan-to-Know is to simplify complex food labels and convert the
 - AI-powered food insights
 - User dietary preference filters
 
-## Contributors
 
-- Project developed as part of an academic and health-focused food analysis initiative.
+## Outputs 
+
+<img width="1037" height="582" alt="image" src="https://github.com/user-attachments/assets/5dad56b6-ac5a-4498-8986-e9362e8eff2e" />
+
+<img width="1034" height="580" alt="image" src="https://github.com/user-attachments/assets/8c5a1f45-70b1-4c5f-b90e-73cb116d536d" />
+
+<img width="1038" height="585" alt="image" src="https://github.com/user-attachments/assets/02914393-bc09-470d-a675-59ff129633c7" />
+
+<img width="1034" height="578" alt="image" src="https://github.com/user-attachments/assets/054509c5-53cb-4728-b07e-67d0378be4e8" />
+
+## Contributors
+- OM MUJUMDAR 
+- PARTH MISHRA (github - https://github.com/nparth29)
+- PRATHAMESH RANE (github - https://github.com/ORION-pax07)
