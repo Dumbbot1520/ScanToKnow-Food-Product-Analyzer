@@ -8,6 +8,8 @@ The system identifies harmful additives, preservatives, and risky ingredients, t
 
 In addition to analysis, Scan-to-Know also recommends healthier alternatives, encouraging users to make better food decisions instead of simply avoiding products.
 
+## Before using the project ensure you add your MONGODB URI and OCR SPACE API KEY in the .env file in the backend folder and then run the backend.
+
 ## Features
 
 - Barcode-based product scanning
